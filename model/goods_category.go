@@ -3,7 +3,7 @@ package model
 import "github.com/baaj2109/newbee_mall/utils"
 
 type GoodsCategory struct {
-	CategoryId    int            `json:"categoryId"gorm:"primarykey;AUTO_INCREMENT"`
+	CategoryId    int            `json:"categoryId" gorm:"primarykey;AUTO_INCREMENT"`
 	CategoryLevel int            `json:"categoryLevel" gorm:"comment:分类等级"`
 	ParentId      int            `json:"parentId" gorm:"comment:父类id"`
 	CategoryName  string         `json:"categoryName" gorm:"comment:分类名称"`

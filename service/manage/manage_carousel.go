@@ -39,7 +39,7 @@ func (m *ManageCarouselService) DeleteCarousel(ids request.IdsReq) (err error) {
 }
 
 // update carousel
-func (m *ManageCarouselService) UpdateCarousel(request update_request.MallCarouselUpdateParam) (err error) {
+func (m *ManageCarouselService) UpdateCarousel(request update_request.CarouselUpdateParam) (err error) {
 	if !errors.Is(global.GVA_DB.Where("carousel_id = ?", request.CarouselId).First(&model.Carousel{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("carousel not found")
 	}
