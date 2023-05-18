@@ -8,7 +8,9 @@ import (
 	"github.com/baaj2109/newbee_mall/global"
 	"github.com/baaj2109/newbee_mall/model"
 	"github.com/baaj2109/newbee_mall/model/common/enum"
+	"github.com/baaj2109/newbee_mall/model/common/request"
 	"github.com/baaj2109/newbee_mall/model/request/goods_info_request"
+	"github.com/baaj2109/newbee_mall/model/request/update_request"
 	"github.com/baaj2109/newbee_mall/utils"
 	"gorm.io/gorm"
 )
@@ -54,4 +56,49 @@ func (m *ManageGoodsInfoService) CreateGoodsInfo(request goods_info_request.Good
 	}
 	err = global.GVA_DB.Create(&goodsInfo).Error
 	return err
+}
+
+// delete goods info
+func (m *ManageGoodsInfoService) DeleteGoodsInfo(goodsInfo model.GoodsInfo) (err error) {
+	return global.GVA_DB.Delete(&goodsInfo).Error
+}
+
+// switch goods info
+func (m *ManageGoodsInfoService) ChangeMallGoodsInfoByIds(ids request.IdsReq, sellStatus string) (err error) {
+	intSellStatus, _ := strconv.Atoi(sellStatus)
+	//更新字段為sell_status=0時，不能直接UpdateColumns
+	err = global.GVA_DB.Model(&model.GoodsInfo{}).Where("goods_id in ?", ids.Ids).Update("goods_sell_status", intSellStatus).Error
+	return err
+}
+
+// update goods info
+func (m *ManageGoodsInfoService) UpdateGoodsInfo(request update_request.GoodsInfoUpdateParam) (err error) {
+	goodsId, _ := strconv.Atoi(request.GoodsId)
+	originalPrice, _ := strconv.Atoi(request.OriginalPrice)
+	stockNum, _ := strconv.Atoi(request.StockNum)
+	goodsInfo := model.GoodsInfo{
+		GoodsId:            goodsId,
+		GoodsName:          request.GoodsName,
+		GoodsIntro:         request.GoodsIntro,
+		GoodsCategoryId:    request.GoodsCategoryId,
+		GoodsCoverImg:      request.GoodsCoverImg,
+		GoodsDetailContent: request.GoodsDetailContent,
+		OriginalPrice:      originalPrice,
+		SellingPrice:       request.SellingPrice,
+		StockNum:           stockNum,
+		Tag:                request.Tag,
+		GoodsSellStatus:    request.GoodsSellStatus,
+		UpdateTime:         utils.JSONTime{Time: time.Now()},
+	}
+	if err = utils.Verify(goodsInfo, utils.GoodsAddParamVerify); err != nil {
+		return errors.New(err.Error())
+	}
+	err = global.GVA_DB.Where("goods_id=?", goodsInfo.GoodsId).Updates(&goodsInfo).Error
+	return err
+}
+
+// get goods info
+func (m *ManageGoodsInfoService) GetGoodsInfo(goodsId int) (goodsInfo model.GoodsInfo, err error) {
+	err = global.GVA_DB.Where("goods_id=?", goodsId).First(&goodsInfo).Error
+	return
 }

@@ -27,7 +27,6 @@ func Zap() (logger *zap.Logger) {
 	infoPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
 		return lev == zap.InfoLevel
 	})
-
 	warnPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
 		return lev == zap.WarnLevel
 	})
