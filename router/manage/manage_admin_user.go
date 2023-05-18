@@ -22,7 +22,6 @@ func (r *ManageAdminUserRouter) InitManageAdminUserRouter(Router *gin.RouterGrou
 		mallAdminUserRouter.GET("adminUser/profile", mallAdminUserApi.GetAdminUser) // 根據ID獲取 admin詳情
 		mallAdminUserRouter.DELETE("logout", mallAdminUserApi.AdminUserLogout)
 		// 	mallAdminUserRouter.POST("upload/file", mallAdminUserApi.UploadFile) //上傳圖片
-
 	}
 	{
 		mallAdminUserWithoutRouter.POST("adminUser/login", mallAdminUserApi.AdminUserLogin) //管理員登入
