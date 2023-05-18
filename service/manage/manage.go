@@ -4,10 +4,10 @@ type ManageServiceGroup struct {
 	ManageAdminUserService
 	ManageAdminUserTokenService
 	// ManageUserService
-	// ManageGoodsCategoryService
-	// ManageGoodsInfoService
+	ManageGoodsCategoryService
+	ManageGoodsInfoService
 	ManageCarouselService
-	// ManageIndexConfigService
-	// ManageOrderService
+	ManageIndexConfigService
+	ManageOrderService
 	UserStatusService
 }
