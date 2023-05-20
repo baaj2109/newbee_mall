@@ -1,10 +1,10 @@
 package manage
 
 type ManageRouterGroup struct {
-	// ManageGoodsCategoryRouter
+	ManageGoodsCategoryRouter
 	ManageAdminUserRouter
-	// ManageGoodsInfoRouter
-	// ManageCarouselRouter
-	// ManageIndexConfigRouter
+	ManageGoodsInfoRouter
+	ManageCarouselRouter
+	ManageIndexConfigRouter
 	// ManageOrderRouter
 }

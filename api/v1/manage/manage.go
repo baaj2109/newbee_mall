@@ -5,9 +5,9 @@ import "github.com/baaj2109/newbee_mall/service"
 type ManageGroup struct {
 	AdminUserApi
 	ManageGoodsCategoryApi
-	// ManageGoodsInfoApi
+	ManageGoodsInfoApi
 	ManageCarouselApi
-	// ManageIndexConfigApi
+	ManageIndexConfigApi
 	// ManageOrderApi
 }
 
