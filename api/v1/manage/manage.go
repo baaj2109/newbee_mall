@@ -8,7 +8,7 @@ type ManageGroup struct {
 	ManageGoodsInfoApi
 	ManageCarouselApi
 	ManageIndexConfigApi
-	// ManageOrderApi
+	ManageOrderApi
 }
 
 var mallAdminUserService = service.ServiceGroupApp.ManageServiceGroup.ManageAdminUserService
