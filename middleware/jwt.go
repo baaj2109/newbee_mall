@@ -3,7 +3,7 @@ package middleware
 import (
 	"time"
 
-	"github.com/baaj2109/newbee_mall/model/common/response"
+	"github.com/baaj2109/newbee_mall/model/response"
 	"github.com/baaj2109/newbee_mall/service"
 	"github.com/gin-gonic/gin"
 )

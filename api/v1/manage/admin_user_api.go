@@ -5,10 +5,10 @@ import (
 
 	"github.com/baaj2109/newbee_mall/global"
 	"github.com/baaj2109/newbee_mall/model"
-	"github.com/baaj2109/newbee_mall/model/common/request"
-	"github.com/baaj2109/newbee_mall/model/common/response"
+	"github.com/baaj2109/newbee_mall/model/request"
+	"github.com/baaj2109/newbee_mall/model/request/admin_request"
 	"github.com/baaj2109/newbee_mall/model/request/update_request"
-	"github.com/baaj2109/newbee_mall/model/request/user_request"
+	"github.com/baaj2109/newbee_mall/model/response"
 	"github.com/baaj2109/newbee_mall/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -19,7 +19,7 @@ type AdminUserApi struct {
 
 // create admin user api by gin context
 func (a *AdminUserApi) CreateAdminUser(c *gin.Context) {
-	var params user_request.AdminParam
+	var params admin_request.AdminParam
 	_ = c.ShouldBindJSON(&params)
 	if err := utils.Verify(params, utils.AdminUserRegisterVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -40,7 +40,7 @@ func (a *AdminUserApi) CreateAdminUser(c *gin.Context) {
 
 // update admin user password by gin context
 func (a *AdminUserApi) UpdateAdminUserPassword(c *gin.Context) {
-	var params update_request.UpdatePasswordParam
+	var params update_request.UpdateAdminPasswordParam
 	_ = c.ShouldBindJSON(&params)
 	userToken := c.GetHeader("token")
 	if err := mallAdminUserService.UpdateAdminUserPassword(userToken, params); err != nil {
@@ -53,7 +53,7 @@ func (a *AdminUserApi) UpdateAdminUserPassword(c *gin.Context) {
 
 // update admin user name by gin context
 func (a *AdminUserApi) UpdateAdminUserName(c *gin.Context) {
-	var params update_request.UpdateNameParam
+	var params update_request.UpdateAdminNameParam
 	_ = c.ShouldBindJSON(&params)
 	userToken := c.GetHeader("token")
 	if err := mallAdminUserService.UpdateAdminUserName(userToken, params); err != nil {
@@ -78,7 +78,7 @@ func (a *AdminUserApi) GetAdminUser(c *gin.Context) {
 
 // admin user login by gin context
 func (a *AdminUserApi) AdminUserLogin(c *gin.Context) {
-	var params user_request.AdminLoginParam
+	var params admin_request.AdminLoginParam
 	_ = c.ShouldBindJSON(&params)
 	if _, adminToken, err := mallAdminUserService.AdminLogin(params); err != nil {
 		response.FailWithMessage("admin user login failed", c)

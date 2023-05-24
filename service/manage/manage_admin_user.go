@@ -6,8 +6,8 @@ import (
 
 	"github.com/baaj2109/newbee_mall/global"
 	"github.com/baaj2109/newbee_mall/model"
+	"github.com/baaj2109/newbee_mall/model/request/admin_request"
 	"github.com/baaj2109/newbee_mall/model/request/update_request"
-	"github.com/baaj2109/newbee_mall/model/request/user_request"
 	"github.com/baaj2109/newbee_mall/utils"
 	"gorm.io/gorm"
 )
@@ -22,7 +22,7 @@ func (m *ManageAdminUserService) CreateAdminUser(adminUser model.AdminUser) erro
 	return global.GVA_DB.Create(&adminUser).Error
 }
 
-func (m *ManageAdminUserService) UpdateAdminUserName(token string, request update_request.UpdateNameParam) error {
+func (m *ManageAdminUserService) UpdateAdminUserName(token string, request update_request.UpdateAdminNameParam) error {
 	var adminUserToken model.AdminUserToken
 	err := global.GVA_DB.Where("token = ?", token).First(&adminUserToken).Error
 	if err != nil {
@@ -35,7 +35,7 @@ func (m *ManageAdminUserService) UpdateAdminUserName(token string, request updat
 		}).Error
 }
 
-func (m *ManageAdminUserService) UpdateAdminUserPassword(token string, request update_request.UpdatePasswordParam) error {
+func (m *ManageAdminUserService) UpdateAdminUserPassword(token string, request update_request.UpdateAdminPasswordParam) error {
 	var adminUserToken model.AdminUserToken
 	err := global.GVA_DB.Where("token = ?", token).First(&adminUserToken).Error
 	if err != nil {
@@ -65,7 +65,7 @@ func (m *ManageAdminUserService) GetAdminUser(token string) (model.AdminUser, er
 	return adminUser, err
 }
 
-func (m *ManageAdminUserService) AdminLogin(params user_request.AdminLoginParam) (mallAdminUser model.AdminUser, adminToken model.AdminUserToken, err error) {
+func (m *ManageAdminUserService) AdminLogin(params admin_request.AdminLoginParam) (mallAdminUser model.AdminUser, adminToken model.AdminUserToken, err error) {
 	err = global.GVA_DB.Where("login_user_name=? AND login_password=?", params.UserName, params.PasswordMd5).First(&mallAdminUser).Error
 	if mallAdminUser != (model.AdminUser{}) {
 		token := utils.GetNewToken(time.Now().UnixNano()/1e6, int(mallAdminUser.AdminUserId))

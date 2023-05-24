@@ -5,9 +5,9 @@ type MallServiceGroup struct {
 	MallCarouselService
 	// MallGoodsInfoService
 	// MallGoodsCategoryService
-	// MallUserService
-	// MallUserTokenService
-	// MallUserAddressService
+	MallUserService
+	MallUserTokenService
+	MallUserAddressService
 	// MallShopCartService
 	// MallOrderService
 }

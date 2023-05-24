@@ -1,11 +1,7 @@
 package update_request
 
-type UpdateNameParam struct {
-	LoginUserName string `json:"loginUserName"`
+type UpdateUserInfoParam struct {
 	NickName      string `json:"nickName"`
-}
-
-type UpdatePasswordParam struct {
-	OriginalPassword string `json:"originalPassword"`
-	NewPassword      string `json:"newPassword"`
+	PasswordMd5   string `json:"passwordMd5"`
+	IntroduceSign string `json:"introduceSign"`
 }

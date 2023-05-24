@@ -7,7 +7,7 @@ import (
 
 	"github.com/baaj2109/newbee_mall/global"
 	"github.com/baaj2109/newbee_mall/model"
-	"github.com/baaj2109/newbee_mall/model/common/request"
+	"github.com/baaj2109/newbee_mall/model/request"
 	"github.com/baaj2109/newbee_mall/model/request/goods_category_request"
 	"github.com/baaj2109/newbee_mall/utils"
 	"gorm.io/gorm"
