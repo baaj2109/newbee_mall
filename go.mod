@@ -45,6 +45,7 @@ require (
 
 require (
 	github.com/gin-gonic/gin v1.9.0
+	github.com/jinzhu/copier v0.3.5
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/spf13/viper v1.15.0
 	go.uber.org/zap v1.24.0
