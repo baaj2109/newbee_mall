@@ -1,13 +1,13 @@
 package mall
 
 type MallServiceGroup struct {
-	// MallIndexInfoService
+	MallIndexInfoService
 	MallCarouselService
-	// MallGoodsInfoService
+	MallGoodsInfoService
 	// MallGoodsCategoryService
 	MallUserService
 	MallUserTokenService
 	MallUserAddressService
 	// MallShopCartService
-	// MallOrderService
+	MallOrderService
 }

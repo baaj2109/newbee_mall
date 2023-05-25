@@ -13,3 +13,8 @@ type GoodsInfoAddParam struct {
 	Tag                string `json:"tag"`
 	GoodsSellStatus    string `json:"goodsSellStatus"`
 }
+
+type StockNumDTO struct {
+	GoodsId    int `json:"goodsId"`
+	GoodsCount int `json:"goodsCount"`
+}

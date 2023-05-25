@@ -10,7 +10,7 @@ import (
 type MallIndexInfoService struct {
 }
 
-//// GetConfigGoodsForIndex return相關IndexConfig
+/// GetConfigGoodsForIndex return相關IndexConfig
 
 func (m MallIndexInfoService) GetConfigGoodsForIndex(configType int, num int) (list interface{}, err error) {
 	var indexConfigs []model.IndexConfig
