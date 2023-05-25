@@ -23,7 +23,10 @@ func (m *MallGoodsInfoService) MallGoodsListBySearch(pageNumber int, goodsCatego
 	if goodsCategoryId >= 0 {
 		db.Where("goods_category_id= ?", goodsCategoryId)
 	}
-	err = db.Count(&total).Error
+	if err = db.Count(&total).Error; err != nil {
+		return searchGoodsList, 0, errors.New("db error")
+	}
+
 	switch orderBy {
 	case "new":
 		db.Order("goods_id desc")
@@ -51,7 +54,10 @@ func (m *MallGoodsInfoService) MallGoodsListBySearch(pageNumber int, goodsCatego
 
 func (m *MallGoodsInfoService) GetMallGoodsInfo(id int) (res response.GoodsInfoDetailResponse, err error) {
 	var mallGoodsInfo model.GoodsInfo
-	err = global.GVA_DB.Where("goods_id = ?", id).First(&mallGoodsInfo).Error
+	if err = global.GVA_DB.Where("goods_id = ?", id).First(&mallGoodsInfo).Error; err != nil {
+		return res, errors.New("mall goods info not found")
+	}
+
 	if mallGoodsInfo.GoodsSellStatus != 0 {
 		return response.GoodsInfoDetailResponse{}, errors.New("goods is sold out")
 	}
