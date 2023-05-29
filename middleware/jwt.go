@@ -9,8 +9,7 @@ import (
 )
 
 var manageAdminUserTokenService = service.ServiceGroupApp.ManageServiceGroup.ManageAdminUserTokenService
-
-// var mallUserTokenService = service.ServiceGroupApp.MallServiceGroup.MallUserTokenService
+var mallUserTokenService = service.ServiceGroupApp.MallServiceGroup.MallUserTokenService
 
 func AdminJWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -39,30 +38,30 @@ func AdminJWTAuth() gin.HandlerFunc {
 	}
 }
 
-// func UserJWTAuth() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		token := c.Request.Header.Get("token")
-// 		if token == "" {
-// 			response.UnLogin(nil, c)
-// 			c.Abort()
-// 			return
-// 		}
-// 		err, mallUserToken := mallUserTokenService.IsUserTokenExist(token)
-// 		if err != nil {
-// 			response.UnLogin(nil, c)
-// 			c.Abort()
-// 			return
-// 		}
-// 		if time.Now().After(mallUserToken.ExpireTime) {
-// 			response.FailWithDetailed(nil, "token expired", c)
-// 			err = mallUserTokenService.DeleteMallUserToken(token)
-// 			if err != nil {
-// 				return
-// 			}
-// 			c.Abort()
-// 			return
-// 		}
-// 		c.Next()
-// 	}
+func UserJWTAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.Request.Header.Get("token")
+		if token == "" {
+			response.UnLogin(nil, c)
+			c.Abort()
+			return
+		}
+		mallUserToken, err := mallUserTokenService.ExistUserToken(token)
+		if err != nil {
+			response.UnLogin(nil, c)
+			c.Abort()
+			return
+		}
+		if time.Now().After(mallUserToken.ExpireTime) {
+			response.FailWithDetailed(nil, "token expired", c)
+			err = mallUserTokenService.DeleteMallUserToken(token)
+			if err != nil {
+				return
+			}
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
 
-// }
+}

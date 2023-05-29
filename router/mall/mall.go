@@ -3,7 +3,7 @@ package mall
 type MallRouterGroup struct {
 	// MallCarouselIndexRouter
 	// MallGoodsInfoIndexRouter
-	// MallUserRouter
+	MallUserRouter
 	// MallGoodsCategoryIndexRouter
 	// MallShopCartRouter
 	// MallOrderRouter
