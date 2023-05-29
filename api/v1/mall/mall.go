@@ -3,7 +3,7 @@ package mall
 import "github.com/baaj2109/newbee_mall/service"
 
 type MallGroup struct {
-	// MallIndexApi
+	MallIndexApi
 	// MallGoodsInfoApi
 	// MallGoodsCategoryApi
 	MallUserApi
