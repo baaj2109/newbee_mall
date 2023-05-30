@@ -7,7 +7,7 @@ type MallGroup struct {
 	// MallGoodsInfoApi
 	// MallGoodsCategoryApi
 	MallUserApi
-	// MallUserAddressApi
+	MallUserAddressApi
 	// MallShopCartApi
 	MallOrderApi
 }
