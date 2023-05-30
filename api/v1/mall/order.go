@@ -90,7 +90,7 @@ func (*MallOrderApi) OrderDetailPage(c *gin.Context) {
 }
 
 // / get order list using gin context
-func (*MallOrderApi) OrderListPage(c *gin.Context) {
+func (*MallOrderApi) OrderList(c *gin.Context) {
 	token := c.GetHeader("token")
 	pageNumber, _ := strconv.Atoi(c.Query("pageNumber"))
 	status := c.Query("status")
