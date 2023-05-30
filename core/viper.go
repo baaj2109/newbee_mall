@@ -16,7 +16,7 @@ func Viper(path ...string) *viper.Viper {
 	if len(path) == 0 {
 		flag.StringVar(&config, "c", "", "choose config file.")
 		flag.Parse()
-		if config == "" { // 优先级: 命令行 > 环境变量 > 默认值
+		if config == "" { // 優先級: 命令行 > 環境變量 > 默認值
 			if configEnv := os.Getenv("BEEMALL_CONFIG"); configEnv == "" {
 				config = "config.yaml"
 				fmt.Printf("[viper] use config.yaml")

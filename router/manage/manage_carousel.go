@@ -14,9 +14,9 @@ func (r *ManageCarouselRouter) InitManageCarouselRouter(Router *gin.RouterGroup)
 	var mallCarouselApi = v1.ApiGroupApp.ManageApiGroup.ManageCarouselApi
 	{
 		mallCarouselRouter.POST("carousels", mallCarouselApi.CreateCarousel)   // 新建MallCarousel
-		mallCarouselRouter.DELETE("carousels", mallCarouselApi.DeleteCarousel) // 删除MallCarousel
+		mallCarouselRouter.DELETE("carousels", mallCarouselApi.DeleteCarousel) // 刪除MallCarousel
 		mallCarouselRouter.PUT("carousels", mallCarouselApi.UpdateCarousel)    // 更新MallCarousel
-		mallCarouselRouter.GET("carousels/:id", mallCarouselApi.FindCarousel)  // 根据ID获取轮播图
-		// mallCarouselRouter.GET("carousels", mallCarouselApi.GetCarouselList)   // 获取轮播图列表
+		mallCarouselRouter.GET("carousels/:id", mallCarouselApi.FindCarousel)  // 根據ID獲取輪播圖
+		// mallCarouselRouter.GET("carousels", mallCarouselApi.GetCarouselList)   // 獲取輪播圖列表
 	}
 }

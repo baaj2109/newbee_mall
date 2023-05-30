@@ -13,8 +13,8 @@ func GetWriteSyncer(file string) zapcore.WriteSyncer {
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   file, //日誌位置
 		MaxSize:    10,   //在切割之前，日誌的最大大小（MB）
-		MaxBackups: 200,  //保留文件的最大个数
-		MaxAge:     30,   //保留文件的最大天数
+		MaxBackups: 200,  //保留文件的最大個數
+		MaxAge:     30,   //保留文件的最大天數
 		Compress:   true, //是否壓縮文件
 	}
 

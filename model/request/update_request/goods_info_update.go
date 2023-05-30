@@ -16,5 +16,5 @@ type GoodsInfoUpdateParam struct {
 	Tag                string         `json:"tag"`
 	GoodsSellStatus    int            `json:"goodsSellStatus"`
 	UpdateUser         int            `json:"updateUser" form:"updateUser" gorm:"column:update_user;comment:修改者主键id;type:int"`
-	UpdateTime         utils.JSONTime `json:"updateTime" form:"updateTime" gorm:"column:update_time;comment:商品修改时间;type:datetime"`
+	UpdateTime         utils.JSONTime `json:"updateTime" form:"updateTime" gorm:"column:update_time;comment:商品修改時間;type:datetime"`
 }

@@ -13,6 +13,6 @@ func (m *MallGoodsInfoIndexRouter) InitMallGoodsInfoIndexRouter(Router *gin.Rout
 	var mallGoodsInfoApi = v1.ApiGroupApp.MallApiGroup.MallGoodsInfoApi
 	{
 		mallGoodsRouter.GET("/search", mallGoodsInfoApi.GoodsSearch)           // 商品搜索
-		mallGoodsRouter.GET("/goods/detail/:id", mallGoodsInfoApi.GoodsDetail) //商品详情
+		mallGoodsRouter.GET("/goods/detail/:id", mallGoodsInfoApi.GoodsDetail) //商品詳情
 	}
 }

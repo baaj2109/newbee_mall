@@ -66,7 +66,7 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 	}
 
 	typ := reflect.TypeOf(st)
-	val := reflect.ValueOf(st) // 獲取reflect.Type类型
+	val := reflect.ValueOf(st) // 獲取reflect.Type類型
 
 	kd := val.Kind() // 獲取到st對應的類別
 	if kd != reflect.Struct {

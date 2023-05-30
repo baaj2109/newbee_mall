@@ -2,7 +2,7 @@ package enum
 
 type IndexConfigEnum int8
 
-// 首页配置项 1-搜索框热搜 2-搜索下拉框热搜 3-(首页)热销商品 4-(首页)新品上线 5-(首页)为你推荐
+// 首頁配置項 1-搜索框熱搜 2-搜索下拉框熱搜 3-(首頁)熱銷商品 4-(首頁)新品上線 5-(首頁)為你推薦
 const (
 	IndexSearchHots     IndexConfigEnum = 1
 	IndexSearchDownHots IndexConfigEnum = 2
@@ -16,13 +16,13 @@ func (i IndexConfigEnum) Info() (int, string) {
 	case IndexSearchHots:
 		return 1, "INDEX_SEARCH_HOTS"
 	case IndexSearchDownHots:
-		return 2, "二级分类"
+		return 2, "二級分類"
 	case IndexGoodsHot:
-		return 3, "三级分类"
+		return 3, "三級分類"
 	case IndexGoodsNew:
-		return 4, "三级分类"
+		return 4, "三級分類"
 	case IndexGoodsRecommond:
-		return 5, "三级分类"
+		return 5, "三級分類"
 	default:
 		return 0, "DEFAULT"
 	}

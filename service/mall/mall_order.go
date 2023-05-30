@@ -208,7 +208,7 @@ func (m *MallOrderService) GetOrderDetailByOrderNo(token string, orderNo string)
 	var newBeeMallOrderItemVOS []response.NewBeeMallOrderItemVO
 	copier.Copy(&newBeeMallOrderItemVOS, &orderItems)
 	copier.Copy(&orderDetail, &mallOrder)
-	// 订单状态前端显示为中文
+	// 訂單狀態前端顯示為中文
 	_, OrderStatusStr := enum.GetNewBeeMallOrderStatusEnumByStatus(orderDetail.OrderStatus)
 	_, payTapStr := enum.GetNewBeeMallOrderStatusEnumByStatus(orderDetail.PayType)
 	orderDetail.OrderStatusString = OrderStatusStr
@@ -224,7 +224,7 @@ func (m *MallOrderService) MallOrderListBySearch(token string, pageNumber int, s
 	if err != nil {
 		return list, total, errors.New("user can't find")
 	}
-	// 根据搜索条件查询
+	// 根據搜索条件查詢
 	var newBeeMallOrders []model.Order
 	db := global.GVA_DB.Model(&newBeeMallOrders)
 
@@ -232,26 +232,26 @@ func (m *MallOrderService) MallOrderListBySearch(token string, pageNumber int, s
 		db.Where("order_status = ?", status)
 	}
 	err = db.Where("user_id =? and is_deleted=0 ", userToken.UserId).Count(&total).Error
-	//这里前段没有做滚动加载，直接显示全部订单
+	//这里前段没有做滚動加载，直接顯示全部訂單
 	//limit := 5
 	offset := 5 * (pageNumber - 1)
 	err = db.Offset(offset).Order(" order_id desc").Find(&newBeeMallOrders).Error
 
 	var orderListVOS []response.MallOrderResponse
 	if total > 0 {
-		//数据转换 将实体类转成vo
+		//數據轉换 将实体類轉成vo
 		copier.Copy(&orderListVOS, &newBeeMallOrders)
-		//设置订单状态中文显示值
+		//设置訂單狀態中文顯示值
 		for _, newBeeMallOrderListVO := range orderListVOS {
 			_, statusStr := enum.GetNewBeeMallOrderStatusEnumByStatus(newBeeMallOrderListVO.OrderStatus)
 			newBeeMallOrderListVO.OrderStatusString = statusStr
 		}
-		// 返回订单id
+		// 返回訂單id
 		var orderIds []int
 		for _, order := range newBeeMallOrders {
 			orderIds = append(orderIds, order.OrderId)
 		}
-		//获取OrderItem
+		//獲取OrderItem
 		var orderItems []model.OrderItem
 		if len(orderIds) > 0 {
 			global.GVA_DB.Where("order_id in ?", orderIds).Find(&orderItems)
@@ -267,7 +267,7 @@ func (m *MallOrderService) MallOrderListBySearch(token string, pageNumber int, s
 					itemByOrderIdMap[k] = v
 				}
 			}
-			//封装每个订单列表对象的订单项数据
+			//封装每個訂單列表对象的訂單項數據
 			for _, newBeeMallOrderListVO := range orderListVOS {
 				if _, ok := itemByOrderIdMap[newBeeMallOrderListVO.OrderId]; ok {
 					orderItemListTemp := itemByOrderIdMap[newBeeMallOrderListVO.OrderId]

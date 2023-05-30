@@ -10,7 +10,7 @@ import (
 type MallGoodsCategoryApi struct {
 }
 
-// 返回分类数据(首页调用)
+// 返回分類數據(首頁調用)
 func (m *MallGoodsCategoryApi) GetGoodsCategory(c *gin.Context) {
 	list, err := mallGoodsCategoryService.GetCategoriesForIndex()
 	if err != nil {

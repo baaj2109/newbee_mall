@@ -12,6 +12,6 @@ func (m *MallGoodsInfoIndexRouter) InitMallGoodsCategoryIndexRouter(Router *gin.
 	mallGoodsRouter := Router.Group("v1")
 	var mallGoodsCategoryApi = v1.ApiGroupApp.MallApiGroup.MallGoodsCategoryApi
 	{
-		mallGoodsRouter.GET("categories", mallGoodsCategoryApi.GetGoodsCategory) // 获取分类数据
+		mallGoodsRouter.GET("categories", mallGoodsCategoryApi.GetGoodsCategory) // 獲取分類數據
 	}
 }

@@ -40,18 +40,18 @@ func GetRouter() *gin.Engine {
 		manageRouter.InitManageOrderRouter(ManageGroup)
 	}
 	//mall frount end
-	// mallRouter := router.RouterGroupApp.Mall
-	// MallGroup := Router.Group("api")
-	// {
-	// 	// mall frount end
-	// 	mallRouter.InitMallCarouselIndexRouter(MallGroup)
-	// 	mallRouter.InitMallGoodsInfoIndexRouter(MallGroup)
-	// 	mallRouter.InitMallGoodsCategoryIndexRouter(MallGroup)
-	// 	mallRouter.InitMallUserRouter(MallGroup)
-	// 	mallRouter.InitMallUserAddressRouter(MallGroup)
-	// 	mallRouter.InitMallShopCartRouter(MallGroup)
-	// 	mallRouter.InitMallOrderRouter(MallGroup)
-	// }
+	mallRouter := RouterGroupApp.Mall
+	MallGroup := Router.Group("api")
+	{
+		// mall frount end
+		// mallRouter.InitMallCarouselIndexRouter(MallGroup)
+		mallRouter.InitMallGoodsInfoIndexRouter(MallGroup)
+		mallRouter.InitMallGoodsCategoryIndexRouter(MallGroup)
+		mallRouter.InitMallUserRouter(MallGroup)
+		mallRouter.InitMallUserAddressRouter(MallGroup)
+		mallRouter.InitMallShopCartRouter(MallGroup)
+		mallRouter.InitMallOrderRouter(MallGroup)
+	}
 	global.GVA_LOG.Info("router register success")
 	return Router
 }
