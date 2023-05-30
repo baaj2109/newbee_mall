@@ -127,3 +127,159 @@ func (m *MallOrderService) SaveOrder(token string, userAddress model.UserAddress
 	}
 	return orderNo, nil
 }
+
+func (m *MallOrderService) PaySuccess(orderNo string, payType int) (err error) {
+	var mallOrder model.Order
+	err = global.GVA_DB.Where("order_no = ? and is_deleted=0 ", orderNo).First(&mallOrder).Error
+	if mallOrder != (model.Order{}) {
+		if mallOrder.OrderStatus != 0 {
+			return errors.New("invalid order status")
+		}
+		mallOrder.OrderStatus = enum.ORDER_PAID.Code()
+		mallOrder.PayType = payType
+		mallOrder.PayStatus = 1
+		mallOrder.PayTime = utils.JSONTime{Time: time.Now()}
+		mallOrder.UpdateTime = utils.JSONTime{Time: time.Now()}
+		err = global.GVA_DB.Save(&mallOrder).Error
+	}
+	return
+}
+
+func (m *MallOrderService) FinishOrder(token string, orderNo string) (err error) {
+	var userToken model.UserToken
+	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
+	if err != nil {
+		return errors.New("user can't find")
+	}
+	var mallOrder model.Order
+	if err = global.GVA_DB.Where("order_no=? and is_deleted = 0", orderNo).First(&mallOrder).Error; err != nil {
+		return errors.New("order can't find")
+	}
+	if mallOrder.UserId != userToken.UserId {
+		return errors.New("user can't find")
+	}
+	mallOrder.OrderStatus = enum.ORDER_SUCCESS.Code()
+	mallOrder.UpdateTime = utils.JSONTime{Time: time.Now()}
+	err = global.GVA_DB.Save(&mallOrder).Error
+	return
+}
+func (m *MallOrderService) CancelOrder(token string, orderNo string) (err error) {
+	var userToken model.UserToken
+	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
+	if err != nil {
+		return errors.New("user can't find")
+	}
+	var mallOrder model.Order
+	if err = global.GVA_DB.Where("order_no=? and is_deleted = 0", orderNo).First(&mallOrder).Error; err != nil {
+		return errors.New("order can't find")
+	}
+	if mallOrder.UserId != userToken.UserId {
+		return errors.New("invalid user")
+	}
+	if utils.NumsInList(mallOrder.OrderStatus, []int{enum.ORDER_SUCCESS.Code(),
+		enum.ORDER_CLOSED_BY_MALLUSER.Code(), enum.ORDER_CLOSED_BY_EXPIRED.Code(), enum.ORDER_CLOSED_BY_JUDGE.Code()}) {
+		return errors.New("invalid order status")
+	}
+	mallOrder.OrderStatus = enum.ORDER_CLOSED_BY_MALLUSER.Code()
+	mallOrder.UpdateTime = utils.JSONTime{Time: time.Now()}
+	err = global.GVA_DB.Save(&mallOrder).Error
+	return
+}
+
+func (m *MallOrderService) GetOrderDetailByOrderNo(token string, orderNo string) (orderDetail response.MallOrderDetailVO, err error) {
+	var userToken model.UserToken
+	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
+	if err != nil {
+		return orderDetail, errors.New("user can't find")
+	}
+	var mallOrder model.Order
+	if err = global.GVA_DB.Where("order_no=? and is_deleted = 0", orderNo).First(&mallOrder).Error; err != nil {
+		return orderDetail, errors.New("order can't find")
+	}
+	if mallOrder.UserId != userToken.UserId {
+		return orderDetail, errors.New("invalid user")
+	}
+	var orderItems []model.OrderItem
+	err = global.GVA_DB.Where("order_id = ?", mallOrder.OrderId).Find(&orderItems).Error
+	if len(orderItems) <= 0 {
+		return orderDetail, errors.New("item can't find")
+	}
+
+	var newBeeMallOrderItemVOS []response.NewBeeMallOrderItemVO
+	copier.Copy(&newBeeMallOrderItemVOS, &orderItems)
+	copier.Copy(&orderDetail, &mallOrder)
+	// 订单状态前端显示为中文
+	_, OrderStatusStr := enum.GetNewBeeMallOrderStatusEnumByStatus(orderDetail.OrderStatus)
+	_, payTapStr := enum.GetNewBeeMallOrderStatusEnumByStatus(orderDetail.PayType)
+	orderDetail.OrderStatusString = OrderStatusStr
+	orderDetail.PayTypeString = payTapStr
+	orderDetail.NewBeeMallOrderItemVOS = newBeeMallOrderItemVOS
+
+	return
+}
+
+func (m *MallOrderService) MallOrderListBySearch(token string, pageNumber int, status string) (list []response.MallOrderResponse, total int64, err error) {
+	var userToken model.UserToken
+	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
+	if err != nil {
+		return list, total, errors.New("user can't find")
+	}
+	// 根据搜索条件查询
+	var newBeeMallOrders []model.Order
+	db := global.GVA_DB.Model(&newBeeMallOrders)
+
+	if status != "" {
+		db.Where("order_status = ?", status)
+	}
+	err = db.Where("user_id =? and is_deleted=0 ", userToken.UserId).Count(&total).Error
+	//这里前段没有做滚动加载，直接显示全部订单
+	//limit := 5
+	offset := 5 * (pageNumber - 1)
+	err = db.Offset(offset).Order(" order_id desc").Find(&newBeeMallOrders).Error
+
+	var orderListVOS []response.MallOrderResponse
+	if total > 0 {
+		//数据转换 将实体类转成vo
+		copier.Copy(&orderListVOS, &newBeeMallOrders)
+		//设置订单状态中文显示值
+		for _, newBeeMallOrderListVO := range orderListVOS {
+			_, statusStr := enum.GetNewBeeMallOrderStatusEnumByStatus(newBeeMallOrderListVO.OrderStatus)
+			newBeeMallOrderListVO.OrderStatusString = statusStr
+		}
+		// 返回订单id
+		var orderIds []int
+		for _, order := range newBeeMallOrders {
+			orderIds = append(orderIds, order.OrderId)
+		}
+		//获取OrderItem
+		var orderItems []model.OrderItem
+		if len(orderIds) > 0 {
+			global.GVA_DB.Where("order_id in ?", orderIds).Find(&orderItems)
+			itemByOrderIdMap := make(map[int][]model.OrderItem)
+			for _, orderItem := range orderItems {
+				itemByOrderIdMap[orderItem.OrderId] = []model.OrderItem{}
+			}
+			for k, v := range itemByOrderIdMap {
+				for _, orderItem := range orderItems {
+					if k == orderItem.OrderId {
+						v = append(v, orderItem)
+					}
+					itemByOrderIdMap[k] = v
+				}
+			}
+			//封装每个订单列表对象的订单项数据
+			for _, newBeeMallOrderListVO := range orderListVOS {
+				if _, ok := itemByOrderIdMap[newBeeMallOrderListVO.OrderId]; ok {
+					orderItemListTemp := itemByOrderIdMap[newBeeMallOrderListVO.OrderId]
+					var newBeeMallOrderItemVOS []response.NewBeeMallOrderItemVO
+					copier.Copy(&newBeeMallOrderItemVOS, &orderItemListTemp)
+					newBeeMallOrderListVO.NewBeeMallOrderItemVOS = newBeeMallOrderItemVOS
+					_, OrderStatusStr := enum.GetNewBeeMallOrderStatusEnumByStatus(newBeeMallOrderListVO.OrderStatus)
+					newBeeMallOrderListVO.OrderStatusString = OrderStatusStr
+					list = append(list, newBeeMallOrderListVO)
+				}
+			}
+		}
+	}
+	return list, total, err
+}

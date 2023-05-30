@@ -9,7 +9,7 @@ type MallGroup struct {
 	MallUserApi
 	// MallUserAddressApi
 	// MallShopCartApi
-	// MallOrderApi
+	MallOrderApi
 }
 
 var mallCarouselService = service.ServiceGroupApp.MallServiceGroup.MallCarouselService
