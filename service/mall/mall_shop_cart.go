@@ -145,26 +145,6 @@ func (m *MallShopCartService) GetCartItemsForSettle(token string, cartItemIds []
 	return
 }
 
-func (m *MallShopCartService) GetCartItemsForSettle(token string, cartItemIds []int) (cartItemRes []response.CartItemResponse, err error) {
-	var userToken model.UserToken
-	err = global.GVA_DB.Where("token =?", token).First(&userToken).Error
-	if err != nil {
-		return cartItemRes, errors.New("user can;t find")
-	}
-	var shopCartItems []model.ShoppingCartItem
-	err = global.GVA_DB.Where("cart_item_id in (?) and user_id = ? and is_deleted = 0", cartItemIds, userToken.UserId).Find(&shopCartItems).Error
-	if err != nil {
-		return
-	}
-	cartItemRes, _ = getMallShoppingCartItemVOS(shopCartItems)
-	//购物车算价
-	priceTotal := 0
-	for _, cartItem := range cartItemRes {
-		priceTotal = priceTotal + cartItem.GoodsCount*cartItem.SellingPrice
-	}
-	return
-}
-
 func getMallShoppingCartItemVOS(cartItems []model.ShoppingCartItem) (cartItemsRes []response.CartItemResponse, err error) {
 	var goodsIds []int
 	for _, cartItem := range cartItems {

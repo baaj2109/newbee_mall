@@ -4,8 +4,8 @@ import "github.com/baaj2109/newbee_mall/service"
 
 type MallGroup struct {
 	MallIndexApi
-	// MallGoodsInfoApi
-	// MallGoodsCategoryApi
+	MallGoodsInfoApi
+	MallGoodsCategoryApi
 	MallUserApi
 	MallUserAddressApi
 	MallShopCartApi
